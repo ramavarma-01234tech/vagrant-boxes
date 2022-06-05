@@ -15,14 +15,18 @@ DOMAIN="01234.tech"
 # INTERNAL_NET="192.168.15."
 # BRIDGE_NET="192.168.1."
 
+# Will mount host user's home directory to mount folders
+
+HOST_USER="t01234"
+
+
 servers=[
   {
     :hostname => "master-1",
     :fqdn => "master-1." + DOMAIN,
     :ram => 4000,
     :box => "ubuntu/focal64",
-    :user_home => "/home/vinay",
-    :projects_home => "/home/vinay/projects",
+    :user_home => "/home/" + HOST_USER,
     :bridged_nw_interface => "wlp3s0",
     :private_ip => "10.10.10.1"
 },
@@ -31,8 +35,7 @@ servers=[
   :fqdn => "worker-1." + DOMAIN,
   :ram => 6000,
   :box => "ubuntu/focal64",
-  :user_home => "/home/vinay",
-  :projects_home => "/home/vinay/projects",
+  :user_home => "/home/" + HOST_USER,
   :bridged_nw_interface => "wlp3s0",
   :private_ip => "10.10.10.2"
 },
@@ -41,8 +44,7 @@ servers=[
   :fqdn => "worker-2." + DOMAIN,
   :ram => 6000,
   :box => "ubuntu/focal64",
-  :user_home => "/home/vinay",
-  :projects_home => "/home/vinay/projects",
+  :user_home => "/home/" + HOST_USER,
   :bridged_nw_interface => "wlp3s0",
   :private_ip => "10.10.10.3"
   }
@@ -80,8 +82,8 @@ Vagrant.configure("2") do |config|
       end
       node.vm.synced_folder "guest_data/"+machine[:hostname], "/home/vagrant/data",
         create: true
-      node.vm.synced_folder machine[:projects_home], "/home/vagrant/projects"
-      node.vm.synced_folder machine[:user_home], "/home/vagrant/host_home"
+      node.vm.synced_folder machine[:user_home]+"/projects", "/projects"
+      node.vm.synced_folder machine[:user_home], "/host_home"
       node.vm.synced_folder "guest_data/shared-folder", "/shared-folder",
         create: true
       node.vm.synced_folder "guest_data/k8s-pv", "/k8s-pv",
