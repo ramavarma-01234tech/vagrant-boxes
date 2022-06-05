@@ -71,7 +71,6 @@ Vagrant.configure("2") do |config|
         echo "### Echo exeuting post boot scripts ###"
         echo "#######################################"
         sudo apt-get -y update
-        sudo apt-get -y upgrade
         echo "#######################################"
         echo "### Done exeuting post boot scripts ###"
         echo "#######################################"
