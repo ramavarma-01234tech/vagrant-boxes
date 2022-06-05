@@ -81,7 +81,8 @@ Vagrant.configure("2") do |config|
       end
       node.vm.synced_folder "guest_data/"+machine[:hostname], "/home/vagrant/data",
         create: true
-      node.vm.synced_folder "../", "/home/vagrant/projects"
+      node.vm.synced_folder machine[:projects_home], "/home/vagrant/projects"
+      node.vm.synced_folder machine[:user_home], "/home/vagrant/host_home"
       node.vm.synced_folder "guest_data/shared-folder", "/shared-folder",
         create: true
       node.vm.synced_folder "guest_data/k8s-pv", "/k8s-pv",
