@@ -11,7 +11,7 @@ APP="k8"
 ENV_NAME="dev"
 
 # Please do not edit anything below this
-DOMAIN="01234.tech"
+DOMAIN="local"
 # INTERNAL_NET="192.168.15."
 # BRIDGE_NET="192.168.1."
 
@@ -22,31 +22,34 @@ HOST_USER="t01234"
 
 servers=[
   {
-    :hostname => "master-1",
+    :hostname => "master-1." + DOMAIN,
     :fqdn => "master-1." + DOMAIN,
     :ram => 4000,
     :box => "ubuntu/focal64",
     :user_home => "/home/" + HOST_USER,
     :bridged_nw_interface => "wlp3s0",
-    :private_ip => "10.10.10.1"
+    :private_ip => "10.10.10.10",
+    :public_ip => "192.168.1.50"
 },
 {
-  :hostname => "worker-1",
+  :hostname => "worker-1." + DOMAIN,
   :fqdn => "worker-1." + DOMAIN,
   :ram => 6000,
   :box => "ubuntu/focal64",
   :user_home => "/home/" + HOST_USER,
   :bridged_nw_interface => "wlp3s0",
-  :private_ip => "10.10.10.2"
+  :private_ip => "10.10.10.20",
+  :public_ip => "192.168.1.51"
 },
 {
-  :hostname => "worker-2",
+  :hostname => "worker-2." + DOMAIN,
   :fqdn => "worker-2." + DOMAIN,
   :ram => 6000,
   :box => "ubuntu/focal64",
   :user_home => "/home/" + HOST_USER,
   :bridged_nw_interface => "wlp3s0",
-  :private_ip => "10.10.10.3"
+  :private_ip => "10.10.10.30",
+  :public_ip => "192.168.1.52"
   }
 ]
 
@@ -63,7 +66,8 @@ Vagrant.configure("2") do |config|
       # node.ssh.host = machine[:hostname]
       node.vm.network "public_network",
         use_dhcp_assigned_default_route: true,
-         bridge: machine[:bridged_nw_interface]
+        ip: machine[:public_ip],
+        bridge: machine[:bridged_nw_interface]
       node.vm.network "private_network",
         ip: machine[:private_ip],
         virtualbox__intnet: true
